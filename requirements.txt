@@ -1,0 +1,5 @@
+# Thư viện Python cho tính năng phát âm (tu nghe / hoc --nghe)
+# Cài bằng: pip install -r requirements.txt --break-system-packages
+# Không cần venv — cài thẳng vào hệ thống theo yêu cầu.
+edge-tts>=6.1
+gTTS>=2.5

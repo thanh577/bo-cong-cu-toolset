@@ -1,0 +1,75 @@
+你好|nǐ hǎo|Xin chào|你好！很高兴认识你。(Xin chào! Rất vui được gặp bạn.)|Nỉ hảo|Nỉ hảo! Hẩn cao xing rấn sứ nỉ.
+谢谢|xiè xie|Cảm ơn|谢谢你的帮助。(Cảm ơn sự giúp đỡ của bạn.)|Siê siê|Siê siê nỉ đơ băng chủ.
+对不起|duì bu qǐ|Xin lỗi|对不起，我来晚了。(Xin lỗi, tôi đến muộn.)|Đuây bù chỉ|Đuây bù chỉ, uổ lái uẩn lơ.
+没关系|méi guān xi|Không sao|没关系，请坐。(Không sao, mời ngồi.)|Mấy quan xi|Mấy quan xi, chỉnh trò.
+今天|jīn tiān|Hôm nay|今天天气很好。(Hôm nay thời tiết rất đẹp.)|Chin thiên|Chin thiên thiên chì hẩn hảo.
+明天|míng tiān|Ngày mai|明天我有会议。(Ngày mai tôi có cuộc họp.)|Minh thiên|Minh thiên uổ yẩu huây yi.
+昨天|zuó tiān|Hôm qua|昨天我很忙。(Hôm qua tôi rất bận.)|Trước thiên|Trước thiên uổ hẩn máng.
+工作|gōng zuò|Công việc|你的工作怎么样？(Công việc của bạn thế nào?)|Công trố|Nỉ đơ công trố thẩm mơ yàng?
+学习|xué xí|Học tập|我每天学习中文。(Tôi học tiếng Trung mỗi ngày.)|Xuyê xi|Uổ mẩy thiên xuyê xi chung uấn.
+朋友|péng yǒu|Bạn bè|他是我的好朋友。(Anh ấy là bạn tốt của tôi.)|Phấng yẩu|Thă sứ uổ đơ hảo phấng yẩu.
+家人|jiā rén|Gia đình|我很爱我的家人。(Tôi rất yêu gia đình mình.)|Chia rấn|Uổ hẩn ài uổ đơ chia rấn.
+吃饭|chī fàn|Ăn cơm|你吃饭了吗？(Bạn ăn cơm chưa?)|Chư phàn|Nỉ chư phàn lơ ma?
+喝水|hē shuǐ|Uống nước|多喝水对身体好。(Uống nhiều nước tốt cho sức khỏe.)|Hơ thuấy|Đuô hơ thuấy đuây sân tỉ hảo.
+睡觉|shuì jiào|Ngủ|我昨晚睡得很好。(Tối qua tôi ngủ rất ngon.)|Thuây chiào|Uổ trước uẩn thuây đơ hẩn hảo.
+时间|shí jiān|Thời gian|时间就是金钱。(Thời gian là vàng bạc.)|Sứ chiên|Sứ chiên chiù sứ chin chiền.
+钱|qián|Tiền|这个多少钱？(Cái này bao nhiêu tiền?)|Chiền|Chợ cơ đuô sảo chiền?
+贵|guì|Đắt|这个太贵了。(Cái này đắt quá.)|Quây|Chợ cơ thài quây lơ.
+便宜|pián yi|Rẻ|这里的东西很便宜。(Đồ ở đây rất rẻ.)|Phiền yi|Chợ lỉ đơ đông xi hẩn phiền yi.
+买|mǎi|Mua|我想买这个。(Tôi muốn mua cái này.)|Mẩy|Uổ xiảng mẩy chợ cơ.
+卖|mài|Bán|这里卖什么？(Ở đây bán gì?)|Mài|Chợ lỉ mài sấn mơ?
+好|hǎo|Tốt / Được|好的，没问题。(Được, không vấn đề gì.)|Hảo|Hảo đơ, mấy uấn thí.
+不好|bù hǎo|Không tốt|这个质量不好。(Chất lượng cái này không tốt.)|Bù hảo|Chợ cơ chứ liàng bù hảo.
+大|dà|To / Lớn|这个房间很大。(Căn phòng này rất rộng.)|Đà|Chợ cơ phàng chiên hẩn đà.
+小|xiǎo|Nhỏ|我有一只小猫。(Tôi có một con mèo nhỏ.)|Xiảo|Uổ yẩu yi chỉ xiảo máo.
+多|duō|Nhiều|今天人很多。(Hôm nay nhiều người.)|Đuô|Chin thiên rấn hẩn đuô.
+少|shǎo|Ít|我说的少，做的多。(Tôi nói ít, làm nhiều.)|Sảo|Uổ suô đơ sảo, trò đơ đuô.
+快|kuài|Nhanh|请快一点。(Xin nhanh lên một chút.)|Khuài|Chỉng khuài yi điẩn.
+慢|màn|Chậm|请说慢一点。(Xin nói chậm một chút.)|Màn|Chỉng suô màn yi điẩn.
+来|lái|Đến / Lại|你从哪里来？(Bạn đến từ đâu?)|Lái|Nỉ thóng nả lỉ lái?
+去|qù|Đi|你去哪里？(Bạn đi đâu?)|Chuy|Nỉ chuy nả lỉ?
+回家|huí jiā|Về nhà|我要回家了。(Tôi phải về nhà rồi.)|Huây chia|Uổ yào huây chia lơ.
+上班|shàng bān|Đi làm|我每天八点上班。(Tôi đi làm lúc 8 giờ mỗi ngày.)|Sảng ban|Uổ mẩy thiên ba điẩn sảng ban.
+下班|xià bān|Tan làm|你几点下班？(Bạn mấy giờ tan làm?)|Xia ban|Nỉ chỉ điẩn xia ban?
+公司|gōng sī|Công ty|我在一家小公司工作。(Tôi làm ở một công ty nhỏ.)|Công sư|Uổ chài yi chia xiảo công sư công trố.
+老板|lǎo bǎn|Sếp / Ông chủ|我的老板很好。(Sếp tôi rất tốt.)|Lảo bản|Uổ đơ lảo bản hẩn hảo.
+同事|tóng shì|Đồng nghiệp|我的同事都很友好。(Đồng nghiệp của tôi đều thân thiện.)|Thóng sứ|Uổ đơ thóng sứ đou hẩn yẩu hảo.
+会议|huì yì|Cuộc họp|下午有一个会议。(Chiều nay có một cuộc họp.)|Huây yi|Xia ủ yẩu yi cơ huây yi.
+电话|diàn huà|Điện thoại|请给我打电话。(Xin hãy gọi điện cho tôi.)|Điền hua|Chỉng gẩy uổ đả điền hua.
+电脑|diàn nǎo|Máy tính|我的电脑坏了。(Máy tính của tôi bị hỏng.)|Điền nảo|Uổ đơ điền nảo huài lơ.
+手机|shǒu jī|Điện thoại di động|我的手机没电了。(Điện thoại tôi hết pin rồi.)|Sẩu chi|Uổ đơ sẩu chi mấy điền lơ.
+网络|wǎng luò|Mạng internet|这里有网络吗？(Ở đây có wifi không?)|Uổng luò|Chợ lỉ yẩu uổng luò ma?
+邮件|yóu jiàn|Email|我给你发邮件。(Tôi sẽ gửi email cho bạn.)|Yẩu chiền|Uổ gẩy nỉ phă yẩu chiền.
+地址|dì zhǐ|Địa chỉ|你的地址是什么？(Địa chỉ của bạn là gì?)|Đi chỉ|Nỉ đơ đi chỉ sứ sấn mơ?
+城市|chéng shì|Thành phố|上海是一个大城市。(Thượng Hải là một thành phố lớn.)|Chứng sứ|Sảng hải sứ yi cơ đà chứng sứ.
+国家|guó jiā|Quốc gia|你来自哪个国家？(Bạn đến từ quốc gia nào?)|Cuó chia|Nỉ lái từ nả cơ cuó chia?
+越南|Yuè nán|Việt Nam|越南的食物很好吃。(Đồ ăn Việt Nam rất ngon.)|Yuề nán|Yuề nán đơ sứ ủ hẩn hảo chư.
+中国|Zhōng guó|Trung Quốc|中国有很多历史。(Trung Quốc có rất nhiều lịch sử.)|Chung cuó|Chung cuó yẩu hẩn đuô lì sứ.
+语言|yǔ yán|Ngôn ngữ|你会说几种语言？(Bạn nói được mấy thứ tiếng?)|Yủ yén|Nỉ huây suô chỉ chủng yủ yén?
+中文|Zhōng wén|Tiếng Trung|我在学中文。(Tôi đang học tiếng Trung.)|Chung uấn|Uổ chài xuyê chung uấn.
+英文|Yīng wén|Tiếng Anh|你会说英文吗？(Bạn có biết tiếng Anh không?)|Inh uấn|Nỉ huây suô inh uấn ma?
+医院|yī yuàn|Bệnh viện|医院在哪里？(Bệnh viện ở đâu?)|Yi yuền|Yi yuền chài nả lỉ?
+药|yào|Thuốc|这个药很苦。(Thuốc này rất đắng.)|Yào|Chợ cơ yào hẩn kủ.
+身体|shēn tǐ|Cơ thể / Sức khỏe|注意身体。(Hãy giữ gìn sức khỏe.)|Sân tỉ|Chủ yi sân tỉ.
+天气|tiān qì|Thời tiết|今天天气怎么样？(Hôm nay thời tiết thế nào?)|Thiên chì|Chin thiên thiên chì thẩn mơ yàng?
+热|rè|Nóng|今天很热。(Hôm nay rất nóng.)|Rề|Chin thiên hẩn rề.
+冷|lěng|Lạnh|冬天很冷。(Mùa đông rất lạnh.)|Lẻng|Đông thiên hẩn lẻng.
+下雨|xià yǔ|Mưa|今天会下雨吗？(Hôm nay có mưa không?)|Xia yủ|Chin thiên huây xia yủ ma?
+高兴|gāo xìng|Vui mừng|见到你很高兴。(Rất vui được gặp bạn.)|Cao xing|Chiền đào nỉ hẩn cao xing.
+难过|nán guò|Buồn|他看起来很难过。(Anh ấy trông có vẻ buồn.)|Nán quò|Thă khàn chỉ lái hẩn nán quò.
+累|lèi|Mệt|我今天很累。(Hôm nay tôi rất mệt.)|Lây|Uổ chin thiên hẩn lây.
+忙|máng|Bận|最近很忙。(Dạo này rất bận.)|Máng|Truy chin hẩn máng.
+重要|zhòng yào|Quan trọng|这件事很重要。(Việc này rất quan trọng.)|Chung yào|Chợ chiền sứ hẩn chung yào.
+问题|wèn tí|Vấn đề / Câu hỏi|有问题请告诉我。(Có vấn đề gì hãy nói với tôi.)|Uấn thí|Yẩu uấn thí chỉng cao sủ uổ.
+答案|dá àn|Câu trả lời|你知道答案吗？(Bạn có biết câu trả lời không?)|Đá àn|Nỉ chư đào đá àn ma?
+帮助|bāng zhù|Giúp đỡ|谢谢你的帮助。(Cảm ơn sự giúp đỡ của bạn.)|Băng chủ|Siê siê nỉ đơ băng chủ.
+需要|xū yào|Cần|你需要什么？(Bạn cần gì?)|Xuy yào|Nỉ xuy yào sấn mơ?
+可以|kě yǐ|Có thể / Được|我可以帮你。(Tôi có thể giúp bạn.)|Khỏ yi|Uổ khỏ yi băng nỉ.
+不可以|bù kě yǐ|Không được|这里不可以吸烟。(Ở đây không được hút thuốc.)|Bù khỏ yi|Chợ lỉ bù khỏ yi xi yên.
+一起|yī qǐ|Cùng nhau|我们一起去吧。(Chúng ta cùng đi nhé.)|Yi chỉ|Uổ mơn yi chỉ chuy ba.
+等一下|děng yī xià|Chờ một chút|等一下，我马上来。(Chờ một chút, tôi đến ngay.)|Đẳng yi xia|Đẳng yi xia, uổ mả sảng lái.
+现在|xiàn zài|Bây giờ|现在几点？(Bây giờ là mấy giờ?)|Xiền chài|Xiền chài chỉ điẩn?
+以后|yǐ hòu|Sau này|以后我们再聊。(Sau này chúng ta nói chuyện tiếp.)|Yi hẩu|Yi hẩu uổ mơn chài liào.
+以前|yǐ qián|Trước đây|以前我住在河内。(Trước đây tôi sống ở Hà Nội.)|Yi chiền|Yi chiền uổ chủ chài hớ nây.
+快乐|kuài lè|hạnh phúc|我很快乐 (tôi rất hạnh phúc)|khuải lặc|ngô vân khuải lặc
+加油|jiā yóu|hỗ trợ, khích lệ|加油，你可以做到！(Cố lên, bạn có thể làm được!)|gia yô|gia yô, ni gia neng zuo dao!
