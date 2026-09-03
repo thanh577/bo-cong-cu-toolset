@@ -19,6 +19,15 @@ Chi tiết cách dùng từng lệnh: xem [HUONG_DAN.md](HUONG_DAN.md).
 curl -fsSL https://raw.githubusercontent.com/thanh577/bo-cong-cu-toolset/main/install.sh | bash -s -- --tat-ca
 ```
 
+Muốn hiện **menu chọn 1-5/0** thay vì cài hết (không cờ):
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/thanh577/bo-cong-cu-toolset/main/install.sh)
+```
+
+> Lưu ý: dạng menu bắt buộc dùng `bash <(...)`. Không dùng `curl ... | bash`
+> (không cờ) vì stdin lúc đó bị pipe chiếm, đến bước nhập số sẽ hỏng.
+
 Cài chọn lọc thì đổi đuôi:
 
 ```bash
