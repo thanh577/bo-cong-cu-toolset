@@ -5,10 +5,9 @@ set -euo pipefail
 #  gọi cai-dat.sh bên trong. Dùng sau khi đã push repo lên GitHub.
 #
 #  Máy mới chỉ cần:
-#    curl -fsSL https://raw.githubusercontent.com/<USER>/<REPO>/main/install.sh | bash -s -- --tat-ca
+#    curl -fsSL https://raw.githubusercontent.com/thanh577/bo-cong-cu-toolset/main/install.sh | bash -s -- --tat-ca
 # ============================================================
 
-# TODO: sửa 2 dòng này theo GitHub thật của bạn sau khi push
 GITHUB_USER="thanh577"
 GITHUB_REPO="bo-cong-cu-toolset"
 NHANH="main"
