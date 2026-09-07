@@ -98,7 +98,8 @@ hien_danh_sach() {
     done <<< "$results"
 
     echo -e "\n   ${VANG}Tổng: ${dem} lệnh${RESET}"
-    echo -e "   ${VANG}Dùng ${TIM}hoc <tên_lệnh>${VANG} để xem chi tiết${RESET}\n"
+    echo -e "   ${VANG}Dùng ${TIM}hoc <tên_lệnh>${VANG} để xem chi tiết${RESET}"
+    echo -e "   ${VANG}Muốn học thuộc? Dùng ${TIM}hoc-linux quiz${VANG} để luyện quiz${RESET}\n"
 }
 
 # ===== CẤU HÌNH GROQ AI =====
@@ -312,21 +313,38 @@ quan_ly_cache() {
 
 
 
-if [ -z "${1:-}" ]; then
-    TONG=$(grep -c '.' "$DB_FILE" 2>/dev/null || echo 0)
+hien_huong_dan() {
+    local tong_db
+    tong_db=$(grep -c '.' "$DB_FILE" 2>/dev/null || echo 0)
     echo -e "\n${TIM}╔════════════════════════════════════════════════════╗${RESET}"
     echo -e "${TIM}║         📘  HOC LENH LINUX                         ║${RESET}"
     echo -e "${TIM}╚════════════════════════════════════════════════════╝${RESET}\n"
-    echo -e "   ${VANG}DB:${RESET} $DB_FILE ${VANG}(${TONG} lệnh)${RESET}\n"
-    echo -e "${XANH}Cách dùng:${RESET}"
+    echo -e "   ${VANG}DB:${RESET} $DB_FILE ${VANG}(${tong_db} lệnh)${RESET}\n"
+    echo -e "${XANH}Tra cứu nhanh:${RESET}"
     printf "   ${TIM}%-30s${RESET} %s\n" "hoc <tên_lệnh>"        "Tra cứu lệnh cụ thể"
-    printf "   ${TIM}%-30s${RESET} %s\n" "hoc --danh-sach"       "Xem toàn bộ ${TONG} lệnh"
+    printf "   ${TIM}%-30s${RESET} %s\n" "hoc --danh-sach"       "Xem toàn bộ ${tong_db} lệnh"
     printf "   ${TIM}%-30s${RESET} %s\n" "hoc --tim <từ_khóa>"   "Tìm theo tên gần đúng (fuzzy)"
     printf "   ${TIM}%-30s${RESET} %s\n" "hoc --mo-ta <từ_khóa>" "Tìm theo mô tả / công dụng"
     printf "   ${TIM}%-30s${RESET} %s\n" "hoc --ai <mô tả>"      "🤖 Hỏi AI (Groq) tìm lệnh"
     printf "   ${TIM}%-30s${RESET} %s\n" "hoc --nghe <tên_lệnh>" "🔊 Đọc to mô tả + các option"
     printf "   ${TIM}%-30s${RESET} %s\n" "hoc --cache [xoa]"     "Xem/xóa cache kết quả AI"
     echo ""
+    echo -e "${XANH}Học tương tác:${RESET} ${VANG}hoc-linux${RESET} — quiz, flashcard, favorites, thống kê"
+    printf "   ${TIM}%-30s${RESET} %s\n" "hoc-linux"             "Mở menu học tương tác"
+    printf "   ${TIM}%-30s${RESET} %s\n" "hoc-linux quiz 5"      "5 câu trắc nghiệm ngẫu nhiên"
+    printf "   ${TIM}%-30s${RESET} %s\n" "hoc-linux flash"       "Flashcard luyện nhớ"
+    printf "   ${TIM}%-30s${RESET} %s\n" "hoc-linux --help"      "Xem đầy đủ các lệnh hoc-linux"
+    echo ""
+}
+
+if [ -z "${1:-}" ]; then
+    hien_huong_dan
+    exit 0
+fi
+
+# ===== TRỢ GIÚP =====
+if [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "--giup-do" ] || [ "$1" = "help" ]; then
+    hien_huong_dan
     exit 0
 fi
 

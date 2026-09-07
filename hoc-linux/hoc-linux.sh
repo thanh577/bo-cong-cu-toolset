@@ -54,19 +54,35 @@ get_vi_du()   { local _v; _v=$(echo "${1}" | cut -d'|' -f3); echo "${_v#"${_v%%[
 # ===== HÀM TIỆN ÍCH =====
 in_header() {
     echo -e "\n${TIM}╔════════════════════════════════════════════════════╗${RESET}"
-    printf "${TIM}║${RESET}  %-50s${TIM}║${RESET}\n" "$1"
+    # Căn lề theo độ rộng HIỂN THỊ (emoji chiếm 2 ô nhưng printf chỉ tính 1) —
+    # nếu không, viền ║ bên phải sẽ lệch ở các tiêu đề có emoji.
+    local tieu_de_dem
+    tieu_de_dem=$(python3 -c "
+import unicodedata,sys
+s=sys.argv[1]; w=50
+dw=sum(2 if unicodedata.east_asian_width(c) in ('W','F') else 1 for c in s)
+print(s+' '*(w-dw) if dw<w else s)
+" "$1" 2>/dev/null || printf '%-50s' "$1")
+    printf "${TIM}║${RESET}  %s${TIM}║${RESET}\n" "$tieu_de_dem"
     echo -e "${TIM}╚════════════════════════════════════════════════════╝${RESET}\n"
 }
 
 ghi_lich_su() {
     local lenh="$1"
     local tg; tg=$(date '+%Y-%m-%d %H:%M')
-    # Không ghi trùng liên tiếp
-    local cuoi; cuoi=$(tail -1 "$HIS_FILE" 2>/dev/null | cut -d'|' -f1 | xargs)
-    [ "$cuoi" = "$lenh" ] && return
-    echo "${lenh}|${tg}" >> "$HIS_FILE"
+    # Không ghi trùng liên tiếp — file lịch sử có thể chưa tồn tại ở lần học
+    # đầu tiên; phải kiểm tra -f trước vì `tail` lên file không có sẽ thất bại
+    # và (do set -euo pipefail) giết cả buổi quiz sau câu đầu tiên.
+    local cuoi=""
+    if [ -f "$HIS_FILE" ]; then
+        cuoi=$(tail -1 "$HIS_FILE" 2>/dev/null | cut -d'|' -f1 | xargs || true)
+    fi
+    if [ "$cuoi" = "$lenh" ]; then
+        return 0
+    fi
+    echo "${lenh}|${tg}" >> "$HIS_FILE" 2>/dev/null || true
     # Giữ tối đa 200 dòng
-    tail -200 "$HIS_FILE" > "$HIS_FILE.tmp" && mv "$HIS_FILE.tmp" "$HIS_FILE"
+    tail -200 "$HIS_FILE" > "$HIS_FILE.tmp" 2>/dev/null && mv "$HIS_FILE.tmp" "$HIS_FILE" || true
 }
 
 # ============================================================
@@ -77,7 +93,7 @@ cmd_quiz() {
     in_header "🧠  QUIZ — Kiểm tra kiến thức lệnh Linux"
 
     # Phân tích tham số: quiz [số_câu] [--type]
-    local so_cau=10
+    local so_cau=20
     local mode_type=0  # 0: multiple choice, 1: type command
     for arg in "${@:-}"; do
         case "$arg" in
@@ -385,19 +401,24 @@ in_menu() {
     [ "$streak" -gt 0 ] && echo -e "   🔥 Streak: ${XANH}${streak} ngày liên tiếp${RESET}\n"
 
     echo -e "${HONG}Chọn chức năng:${RESET}\n"
-    printf "   ${TIM}[1]${RESET}  🧠  Quiz       — Kiểm tra kiến thức (trắc nghiệm)\n"
-    printf "   ${TIM}[2]${RESET}  🧠  Quiz (gõ) — Kiểm tra kiến thức (gõ lệnh)\n"
-    printf "   ${TIM}[3]${RESET}  🃏  Flashcard  — Luyện nhớ (Spaced Repetition)\n"
-    printf "   ${TIM}[4]${RESET}  ⭐  Favorites  — Xem lệnh đã đánh dấu\n"
-    printf "   ${TIM}[5]${RESET}  📜  History    — Lịch sử học tập\n"
-    printf "   ${TIM}[6]${RESET}  📊  Stats      — Thống kê & thành tích\n"
-    printf "   ${TIM}[0]${RESET}  🚪  Thoát\n"
+    # Căn cột "—" bằng khoảng trắng gõ tay (đếm theo ký tự): printf %-Ns đếm
+    # theo byte nên các label có dấu (gõ, Thoát) sẽ lệch 1 ô, gõ tay thì đúng
+    # ở mọi locale.
+    printf "   ${TIM}[1]${RESET}  🧠  ${TIM}Quiz       ${RESET} — Kiểm tra kiến thức (trắc nghiệm)\n"
+    printf "   ${TIM}[2]${RESET}  🧠  ${TIM}Quiz (gõ)  ${RESET} — Kiểm tra kiến thức (gõ lệnh)\n"
+    printf "   ${TIM}[3]${RESET}  🃏  ${TIM}Flashcard  ${RESET} — Luyện nhớ (Spaced Repetition)\n"
+    printf "   ${TIM}[4]${RESET}  ⭐  ${TIM}Favorites  ${RESET} — Xem lệnh đã đánh dấu\n"
+    printf "   ${TIM}[5]${RESET}  📜  ${TIM}History    ${RESET} — Lịch sử học tập\n"
+    printf "   ${TIM}[6]${RESET}  📊  ${TIM}Stats      ${RESET} — Thống kê & thành tích\n"
+    printf "   ${TIM}[0]${RESET}  🚪  ${TIM}Thoát      ${RESET}\n"
+    echo ""
+    echo -e "   ${VANG}Dùng trực tiếp không cần menu: ${TIM}hoc-linux --help${RESET}"
     echo ""
     echo -ne "${VANG}Nhập số lựa chọn: ${RESET}"
     read -r chon || chon=""
     case "$chon" in
         1) cmd_quiz ;;
-        2) cmd_quiz 10 --type ;;
+        2) cmd_quiz 20 --type ;;
         3) cmd_flashcard ;;
         4) cmd_favorites xem ;;
         5) cmd_history ;;
@@ -425,7 +446,9 @@ lay_do_kho() {
 
 cap_nhat_do_kho() {
     local lenh="$1" ket_qua="$2"  # ket_qua: "dung" hoặc "sai"
-    touch "$DIFF_FILE"
+    # File theo dõi có thể chưa ghi được (vd: lần đầu, $HOME bất thường) —
+    # bỏ qua thay vì để set -e giết cả buổi quiz.
+    touch "$DIFF_FILE" 2>/dev/null || return 0
     local lan_sai; lan_sai=$(grep "^${lenh}|" "$DIFF_FILE" 2>/dev/null | cut -d'|' -f2 || echo "0")
     local lan_dung; lan_dung=$(grep "^${lenh}|" "$DIFF_FILE" 2>/dev/null | cut -d'|' -f3 || echo "0")
 
@@ -438,7 +461,7 @@ cap_nhat_do_kho() {
     fi
 
     grep -v "^${lenh}|" "$DIFF_FILE" > "$DIFF_FILE.tmp" 2>/dev/null || true; [ -f "$DIFF_FILE.tmp" ] && mv "$DIFF_FILE.tmp" "$DIFF_FILE" || true
-    echo "${lenh}|${lan_sai}|${lan_dung}" >> "$DIFF_FILE"
+    echo "${lenh}|${lan_sai}|${lan_dung}" >> "$DIFF_FILE" 2>/dev/null || true
 }
 
 chon_lenh_spaced() {
@@ -480,9 +503,14 @@ tinh_streak() {
 
 cap_nhat_streak() {
     local ngay_hom_nay; ngay_hom_nay=$(date '+%Y-%m-%d')
-    local ngay_cuoi; ngay_cuoi=$(cat "$STREAK_FILE" 2>/dev/null | head -1)
-    local streak; streak=$(cat "$STREAK_FILE" 2>/dev/null | tail -1)
-    streak="${streak:-0}"
+    # File streak có thể chưa tồn tại ở lần học đầu tiên — kiểm tra -f trước
+    # vì `cat` lên file không có sẽ thất bại và (do pipefail + set -e) giết script.
+    local ngay_cuoi="" streak=0
+    if [ -f "$STREAK_FILE" ]; then
+        ngay_cuoi=$(head -1 "$STREAK_FILE" 2>/dev/null || true)
+        streak=$(tail -1 "$STREAK_FILE" 2>/dev/null || true)
+        streak="${streak:-0}"
+    fi
 
     if [ "$ngay_cuoi" = "$ngay_hom_nay" ]; then
         return  # Đã cập nhật hôm nay rồi
@@ -491,7 +519,7 @@ cap_nhat_streak() {
     else
         streak=1
     fi
-    printf '%s\n%s\n' "$ngay_hom_nay" "$streak" > "$STREAK_FILE"
+    printf '%s\n%s\n' "$ngay_hom_nay" "$streak" > "$STREAK_FILE" 2>/dev/null || true
 }
 
 # ============================================================
@@ -624,12 +652,37 @@ for opt in sys.argv[1].split(';;'):
 }
 
 # ============================================================
+#  HƯỚNG DẪN
+# ============================================================
+hien_huong_dan() {
+    in_header "🐧  HOC-LINUX — Học lệnh Linux tương tác"
+    echo -e "${XANH}Cách dùng:${RESET}"
+    # Như menu chính: căn cột mô tả bằng khoảng trắng gõ tay (đếm theo ký tự)
+    # vì printf %-Ns đếm theo byte, các label có dấu (số, lệnh, tên) sẽ lệch.
+    printf "   ${TIM}hoc-linux                       ${RESET} Mở menu học tương tác\n"
+    printf "   ${TIM}hoc-linux quiz [số_câu]         ${RESET} Trắc nghiệm (mặc định 20 câu)\n"
+    printf "   ${TIM}hoc-linux quiz --type           ${RESET} Quiz chế độ gõ lệnh\n"
+    printf "   ${TIM}hoc-linux flash                 ${RESET} Flashcard (Enter=tiếp, s=lưu, q=thoát)\n"
+    printf "   ${TIM}hoc-linux fav                   ${RESET} Xem lệnh yêu thích\n"
+    printf "   ${TIM}hoc-linux his                   ${RESET} Lịch sử học tập + thống kê\n"
+    printf "   ${TIM}hoc-linux stats                 ${RESET} Streak, huy hiệu, top lệnh\n"
+    printf "   ${TIM}hoc-linux explain \"<lệnh>\"      ${RESET} Giải thích từng phần của lệnh\n"
+    printf "   ${TIM}hoc-linux cheat <tên_lệnh>      ${RESET} Cheatsheet nhanh\n"
+    echo ""
+    echo -e "${VANG}Tra cứu nhanh 1 lệnh? Dùng:${RESET} ${TIM}hoc ls${RESET}"
+    echo ""
+}
+
+# ============================================================
 #  ĐIỀU PHỐI
 # ============================================================
 case "${1:-}" in
+    "--help"|"-h"|"--giup-do"|"help")
+        hien_huong_dan
+        exit 0 ;;
     "quiz"|"q")
         shift
-        cmd_quiz "${@:-10}" ;;
+        cmd_quiz "${@:-20}" ;;
     "flashcard"|"flash"|"f")
         cmd_flashcard ;;
     "favorites"|"fav"|"star")
@@ -648,6 +701,6 @@ case "${1:-}" in
         in_menu ;;
     *)
         error "Lệnh không hợp lệ: $1"
-        echo -e "Dùng: ${TIM}hoc-linux${RESET} để mở menu"
+        hien_huong_dan
         exit 1 ;;
 esac
