@@ -434,6 +434,46 @@ _go_apt() {
         read -r xac_nhan
 
         if [ "$xac_nhan" = "co" ]; then
+            # LÁ CHẮN CASCADE (bài học vụ gỡ libnss3 ngày 2026-09-07 kéo sập
+            # ubuntu-desktop/gdm3/gnome-shell): mô phỏng trước bằng apt-get -s
+            # (không cần sudo, không thay đổi gì). Nếu gỡ kéo theo gói trong
+            # GOI_BAO_VE thì TỪ CHỐI thẳng; nếu kéo theo gói thường khác thì
+            # hỏi xác nhận lần 2. Gỡ từng gói riêng (tập con của cả danh sách)
+            # không thể kéo theo nhiều hơn gỡ cả danh sách cùng lúc, nên mô
+            # phỏng một lần cho cả danh sách là đủ.
+            GOI_BAO_VE=(ubuntu-desktop ubuntu-desktop-minimal ubuntu-session gdm3 gnome-shell gnome-control-center systemd systemd-sysv libc6 libgcc-s1 base-files bash apt dpkg sudo login passwd util-linux mount coreutils network-manager netplan.io linux-image-generic linux-base xorg xserver-xorg-core)
+            MO_PHONG=$(LC_ALL=C apt-get -s remove --purge "${DANH_SACH_GO[@]}" 2>/dev/null)
+            KEO_THEO=()
+            while IFS= read -r dong_phong; do
+                ten_keo=$(echo "$dong_phong" | awk '{print $2}' | cut -d: -f1)
+                [ -z "$ten_keo" ] && continue
+                la_da_chon=0
+                for g in "${DANH_SACH_GO[@]}"; do
+                    [ "$ten_keo" = "$g" ] && la_da_chon=1 && break
+                done
+                [ "$la_da_chon" = "1" ] && continue
+                KEO_THEO+=("$ten_keo")
+            done < <(echo "$MO_PHONG" | grep '^Purg ' || true)
+            if [ ${#KEO_THEO[@]} -gt 0 ]; then
+                VI_PHAM=()
+                for k in "${KEO_THEO[@]}"; do
+                    for b in "${GOI_BAO_VE[@]}"; do
+                        [ "$k" = "$b" ] && VI_PHAM+=("$k") && break
+                    done
+                done
+                if [ ${#VI_PHAM[@]} -gt 0 ]; then
+                    echo -e "\n   ${DO}⛔ TỪ CHỐI GỠ để bảo vệ máy: '${DANH_SACH_GO[*]}' kéo theo gói hệ thống: ${VI_PHAM[*]}${RESET}"
+                    echo -e "   ${VANG}Gỡ tiếp sẽ làm hỏng Ubuntu (đã từng sập desktop vì gỡ libnss3). Đã hủy, máy không thay đổi gì.${RESET}\n"
+                    continue
+                fi
+                echo -e "\n${VANG}⚠ Gỡ '${DANH_SACH_GO[*]}' sẽ kéo theo ${#KEO_THEO[@]} gói khác: ${KEO_THEO[*]}${RESET}"
+                echo -ne "${VANG}Vẫn gỡ tất cả? (co/khong): ${RESET}"
+                read -r xac_nhan_keo_theo
+                if [ "$xac_nhan_keo_theo" != "co" ]; then
+                    echo -e "${VANG}Đã huỷ.${RESET}\n"
+                    continue
+                fi
+            fi
             for GOI in "${DANH_SACH_GO[@]}"; do
                 echo -ne "   ⏳ Đang gỡ ${TIM}${GOI}${RESET}..."
                 sudo apt-get remove --purge -y "$GOI" -q 2>/dev/null
