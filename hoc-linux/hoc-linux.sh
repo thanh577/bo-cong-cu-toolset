@@ -357,6 +357,9 @@ cmd_history() {
     fi
 
     local so_hien="${1:-30}"
+    # "xoa" là lệnh chứ không phải số lượng — chặn trước để `head -xoa`
+    # khỏi báo lỗi "invalid option" (vẫn hiện lịch sử rồi hỏi xóa ở cuối hàm).
+    [ "$so_hien" = "xoa" ] && so_hien=30
 
     echo -e "${VANG}${so_hien} lệnh tra cứu gần nhất:${RESET}\n"
     printf "   ${TRANG}%-4s %-25s %-12s %s${RESET}\n" "STT" "Lệnh" "Loại" "Thời gian"

@@ -7,6 +7,9 @@ source "$SELF_DIR/lib.sh"
 # cài (symlink ở /usr/local/bin) khiến đường dẫn dự phòng trỏ sai chỗ.
 SCRIPT_DIR="$SELF_DIR"
 CN_DB_FILE="${HOC_CN_DB:-$HOME/.tiengtrung_db.txt}"
+# Dự phòng theo thứ tự: cây nguồn (chạy trực tiếp `bash hoc-trung/tu.sh`
+# trước khi cài) rồi mới tới thư mục cài (/opt/hoc-trung/scripts -> ../data).
+[ ! -f "$CN_DB_FILE" ] && CN_DB_FILE="$SCRIPT_DIR/tiengtrung_db.txt"
 [ ! -f "$CN_DB_FILE" ] && CN_DB_FILE="$SCRIPT_DIR/../data/tiengtrung_db.txt"
 
 if [ ! -f "$CN_DB_FILE" ]; then
@@ -246,7 +249,7 @@ except: pass
         error "❌ AI trả về kết quả không hợp lệ."; exit 1
     fi
     echo -e "${XANH}✔ Kết quả từ AI:${RESET}"; hien_tu "$KQ"
-    echo -ne "${VANG}Lưu vào DB? (co/khong): ${RESET}"; read -r xac_nhan
+    echo -ne "${VANG}Lưu vào DB? (co/khong): ${RESET}"; read -r xac_nhan || xac_nhan="khong"
     if [ "$xac_nhan" = "co" ]; then
         echo "$KQ" >> "$CN_DB_FILE"
         echo -e "${XANH}✔ Đã lưu '${tu_tra}' vào DB. Tổng: $(grep -c '.' "$CN_DB_FILE") từ${RESET}"

@@ -95,11 +95,20 @@ uoc_tinh() {
     # Journal logs
     local log_kb=0
     if command -v journalctl &>/dev/null; then
-        log_kb=$(journalctl --disk-usage 2>/dev/null | grep -oP '[\d.]+(?= [A-Z])' | head -1 || echo 0)
-        # Chuyển đổi nếu là MB
-        local log_unit; log_unit=$(journalctl --disk-usage 2>/dev/null | grep -oP '(?<=[\d] )[A-Z]+' | head -1)
-        [ "$log_unit" = "M" ] && log_kb=$((${log_kb%.*} * 1024))
-        [ "$log_unit" = "G" ] && log_kb=$((${log_kb%.*} * 1024 * 1024))
+        # journalctl báo dạng "330.0M in ..." (số dính liền đơn vị, không có
+        # khoảng trắng ở giữa), nên phải tách số và đơn vị K/M/G riêng.
+        # Không khớp được (vd journal tắt) thì giữ 0 thay vì để trống.
+        local log_txt; log_txt=$(journalctl --disk-usage 2>/dev/null | grep -oP '[\d.]+[KMGT](?= in)' | head -1 || true)
+        if [ -n "$log_txt" ]; then
+            local log_so; log_so=${log_txt%[KMGT]}; log_so=${log_so%.*}
+            [ -z "$log_so" ] && log_so=0
+            case "$log_txt" in
+                *K) log_kb=$log_so ;;
+                *M) log_kb=$(( log_so * 1024 )) ;;
+                *G) log_kb=$(( log_so * 1024 * 1024 )) ;;
+                *) log_kb=0 ;;
+            esac
+        fi
         echo -e "   📋 Journal logs     : ${VANG}$(dinh_dang_dung_luong $((log_kb * 1024)))${RESET} (giữ lại 7 ngày)"
         tong_uoc=$((tong_uoc + log_kb))
     fi
@@ -125,7 +134,21 @@ fi
 
 echo -e "${TIM}[1/6]${RESET} 🗑️  Dọn bộ nhớ đệm APT (gói phần mềm cũ)..."
 APT_CACHE_TRUOC=$(du -sk /var/cache/apt/archives 2>/dev/null | awk '{print $1}')
-sudo apt-get autoremove -y -q 2>/dev/null
+# AN TOÀN (bài học 2026-09-07: gỡ libnss3 làm rớt metapackage ubuntu-desktop,
+# rồi chính dòng autoremove vô điều kiện này cuốn theo ~200 gói "mồ côi").
+# Mô phỏng trước: nếu autoremove định chạm vào gói hệ thống thì BỎ QUA và
+# cảnh báo, thay vì làm sập máy thêm.
+_BO_QUA_AUTO=0
+_MO_PHONG_AUTO=$(LC_ALL=C sudo apt-get -s autoremove -y 2>/dev/null | grep -E '^(Remv|Purg) ' | awk '{print $2}' | cut -d: -f1 || true)
+for _bv in ubuntu-desktop ubuntu-desktop-minimal ubuntu-session gdm3 gnome-shell systemd systemd-sysv libc6 libgcc-s1 bash apt dpkg network-manager; do
+    if echo "$_MO_PHONG_AUTO" | grep -qx "$_bv"; then
+        echo -e "   ${DO}⛔ BỎ QUA autoremove: phát hiện sẽ gỡ gói hệ thống '${_bv}'.${RESET}"
+        echo -e "   ${VANG}Máy có dấu hiệu từng gỡ nhầm metapackage — cài lại trước: ${TIM}sudo apt install ubuntu-desktop${RESET}"
+        _BO_QUA_AUTO=1
+        break
+    fi
+done
+[ "$_BO_QUA_AUTO" = "0" ] && sudo apt-get autoremove -y -q 2>/dev/null
 sudo apt-get clean -q 2>/dev/null
 APT_CACHE_SAU=$(du -sk /var/cache/apt/archives 2>/dev/null | awk '{print $1}')
 APT_TIKET=$((APT_CACHE_TRUOC - APT_CACHE_SAU))
