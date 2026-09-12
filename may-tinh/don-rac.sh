@@ -323,6 +323,13 @@ _go_apt() {
         esac
     done < <(apt-mark showmanual 2>/dev/null | sort)
 
+    # QUAN TRỌNG: DS_TATCA phải theo đúng thứ tự hiển thị (App → CLI → Lib),
+    # vì STT trên màn hình đánh liên tục theo nhóm. Nếu để theo ABC (thứ tự
+    # phân loại) thì DS_TATCA[so-1] sẽ trỏ SAI gói — từng gây gỡ nhầm gói hệ
+    # thống (vd gõ số của app nhưng lại gỡ libnss3). Gói system (khóa 🔒,
+    # không có STT) tuyệt đối không được có mặt trong DS_TATCA.
+    DS_TATCA=("${DS_APP[@]}" "${DS_CLI[@]}" "${DS_LIB[@]}")
+
     if [ ${#DS_TATCA[@]} -eq 0 ]; then
         echo -e "${VANG}Không tìm thấy phần mềm nào.${RESET}\n"
         return
@@ -435,8 +442,8 @@ _go_apt() {
             sudo apt-get autoremove -y -q 2>/dev/null
             echo -e "\n   ${XANH}✔ Hoàn tất! Đã dọn các gói phụ thuộc không còn dùng.${RESET}\n"
 
-            # Làm mới danh sách
-            DS_APP=(); DS_CLI=(); DS_LIB=(); DS_TATCA=()
+            # Làm mới danh sách (giữ đúng thứ tự hiển thị như lúc quét đầu)
+            DS_APP=(); DS_CLI=(); DS_LIB=(); DS_SYS=(); DS_TATCA=()
             while IFS= read -r ten; do
                 [ -z "$ten" ] && continue
                 THONG_TIN=$(dpkg-query -W -f='${Installed-Size}\t${binary:Summary}' "$ten" 2>/dev/null)
@@ -446,14 +453,15 @@ _go_apt() {
                     && HIEN_DUNG="$(echo "scale=1; $DUNG_LUONG/1024" | bc)MB" \
                     || HIEN_DUNG="${DUNG_LUONG:-—}KB"
                 LOAI=$(_phan_loai_goi "$ten")
-                ENTRY="${ten}|${HIEN_DUNG}|$(echo "$MO_TA")"
-                DS_TATCA+=("$ENTRY")
+                ENTRY="${ten}|${HIEN_DUNG}|${MO_TA}|${LOAI}"
                 case "$LOAI" in
                     app) DS_APP+=("$ENTRY") ;;
                     cli) DS_CLI+=("$ENTRY") ;;
                     lib) DS_LIB+=("$ENTRY") ;;
+                    system) DS_SYS+=("$ENTRY") ;;
                 esac
             done < <(apt-mark showmanual 2>/dev/null | sort)
+            DS_TATCA=("${DS_APP[@]}" "${DS_CLI[@]}" "${DS_LIB[@]}")
             OFF_CLI=$((1 + ${#DS_APP[@]}))
             OFF_LIB=$((OFF_CLI + ${#DS_CLI[@]}))
             TONG_GOI=${#DS_TATCA[@]}
