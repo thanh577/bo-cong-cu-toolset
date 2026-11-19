@@ -8,7 +8,7 @@ set -euo pipefail
 #    1) thu-vien  → gói apt + pip cần thiết      (Cài đặt các thư viện — nên làm trước)
 #    2) hoc-linux → lệnh `hoc`, `hoc-linux`      (Mỗi ngày một lệnh Linux)
 #    3) hoc-trung → lệnh `tu`                     (Học từ mới tiếng Trung)
-#    4) may-tinh  → lệnh `donrac`, `pin`          (Công cụ cho máy tính của bạn)
+#    4) may-tinh  → lệnh `donrac`, `pin`, `thoi-tiet`, `toolset`   (Công cụ cho máy tính của bạn)
 # ============================================================
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -228,10 +228,10 @@ if [ -f ~/.lenh_linux_db.txt ]; then
     DONG=$(shuf -n 1 ~/.lenh_linux_db.txt)
     LENH=$(echo "$DONG"      | cut -d'"'"'|'"'"' -f1 | xargs)
     CONG_DUNG=$(echo "$DONG" | cut -d'"'"'|'"'"' -f2 | xargs)
-    VI_DU=$(echo "$DONG"     | cut -d'"'"'|'"'"' -f3)
+    VI_DU=$(echo "$DONG"     | cut -d'"'"'|'"'"' -f3 | sed '"'"'s/;;/, /g'"'"' | xargs)
     VI_DU="${VI_DU#"${VI_DU%%[! ]*}"}"; VI_DU="${VI_DU%"${VI_DU##*[! ]}"}"
     echo -e "\e[1;35m💡 LỆNH HÔM NAY:\e[0m \e[1;33m${LENH}\e[0m — \e[0;37m${CONG_DUNG}\e[0m"
-    echo -e "   \e[0;37mVí dụ:\e[0m \e[1;36m${VI_DU}\e[0m"
+    echo -e "   \e[0;37mTùy chọn:\e[0m \e[1;36m${VI_DU}\e[0m"
 fi'
 
     echo -e "   ${XANH}✔ Xong. Dùng: ${TIM}hoc ls${RESET}${XANH}, ${TIM}hoc-linux quiz${RESET}"
@@ -277,11 +277,7 @@ if [ -f ~/.tiengtrung_db.txt ]; then
     VD=$(echo "$DONG"     | cut -d'"'"'|'"'"' -f4 | xargs)
     echo -e "\e[1;31m🀄 TIẾNG TRUNG HÔM NAY:\e[0m \e[1;33m${HAN}\e[0m  \e[0;37m${PINYIN}\e[0m  \e[1;32m${NGHIA}\e[0m"
     echo -e "   \e[0;37mVí dụ:\e[0m \e[0;36m${VD}\e[0m"
-    # disown: chạy tu nghe ở nền nhưng không để bash in thông báo job-control
-    # kiểu "[1]+ Done ..." ra terminal khi job nền hoàn tất (rất gây khó chịu,
-    # xuất hiện ngay trước dấu nhắc lệnh tiếp theo).
-    { command -v tu &>/dev/null && tu nghe "${HAN}" 2>/dev/null; } &
-    disown 2>/dev/null || true
+    # Không tự động phát âm khi mở terminal; dùng: tu nghe <từ> hoặc tu --nghe <từ>
 fi'
 
     echo -e "   ${XANH}✔ Xong. Dùng: ${TIM}tu 你好${RESET}"
@@ -291,10 +287,10 @@ fi'
 #  3) CÔNG CỤ CHO MÁY TÍNH CỦA BẠN  (donrac, pin)
 # ============================================================
 cai_may_tinh() {
-    echo -e "\n${HONG}▶ Cài đặt: Công cụ cho máy tính của bạn (donrac, pin)${RESET}"
+    echo -e "\n${HONG}▶ Cài đặt: Công cụ cho máy tính của bạn (donrac, pin, thoi-tiet)${RESET}"
     kiem_tra_sudo
 
-    for tep in "don-rac.sh" "giam-sat-pin.sh" "lib.sh"; do
+    for tep in "don-rac.sh" "giam-sat-pin.sh" "lib.sh" "thoi-tiet.sh" "toolset.sh"; do
         if [ ! -f "$SCRIPT_DIR/may-tinh/$tep" ]; then
             echo -e "   ${DO}✗ Thiếu tệp nguồn: may-tinh/$tep${RESET}"
             return 1
@@ -311,8 +307,14 @@ cai_may_tinh() {
 
     sudo ln -sf "$THU_MUC_LINUX_SCRIPT/donrac" /usr/local/bin/donrac
     sudo ln -sf "$THU_MUC_LINUX_SCRIPT/pin"    /usr/local/bin/pin
+    sudo cp "$SCRIPT_DIR/may-tinh/thoi-tiet.sh" "$THU_MUC_LINUX_SCRIPT/thoi-tiet"
+    sudo ln -sf "$THU_MUC_LINUX_SCRIPT/thoi-tiet" /usr/local/bin/thoi-tiet
+    sudo cp "$SCRIPT_DIR/may-tinh/toolset.sh" "$THU_MUC_LINUX_SCRIPT/toolset"
+    sudo ln -sf "$THU_MUC_LINUX_SCRIPT/toolset" /usr/local/bin/toolset
 
-    echo -e "   ${XANH}✔ Xong. Dùng: ${TIM}donrac${RESET}${XANH}, ${TIM}pin${RESET}"
+    them_bashrc_block "toolset-hint" 'echo -e "Bạn đang có các công cụ sau trong terminal: hoc | tu | donrac | pin | thoi-tiet | toolset — gõ toolset để xem chi tiết"'
+
+    echo -e "   ${XANH}✔ Xong. Dùng: ${TIM}donrac${RESET}${XANH}, ${TIM}pin${RESET}, ${TIM}thoi-tiet${RESET}, ${TIM}toolset${RESET}"
 }
 
 # ============================================================
@@ -325,10 +327,11 @@ hien_menu() {
     echo -e "   ${TIM}1${RESET})  ${DO}Cài đặt các thư viện cần thiết (rất quan trọng)${RESET}"
     echo -e "   ${TIM}2${RESET})  Mỗi ngày một lệnh Linux     (hoc, hoc-linux)"
     echo -e "   ${TIM}3${RESET})  Học từ mới tiếng Trung       (tu)"
-    echo -e "   ${TIM}4${RESET})  Công cụ cho máy tính của bạn (donrac, pin)"
+    echo -e "   ${TIM}4${RESET})  Công cụ cho máy tính của bạn (donrac, pin, thoi-tiet, toolset)"
     echo -e "   ${TIM}5${RESET})  Cài tất cả"
+    echo -e "   ${TIM}6${RESET})  Gỡ cài đặt"
     echo -e "   ${TIM}0${RESET})  Thoát"
-    echo -e "\n${VANG}Có thể chọn nhiều mục, cách nhau bằng dấu cách (vd: ${TIM}1 2 4${VANG})${RESET}"
+    echo -e "\n${VANG}Chọn 6 để gỡ bớt, ví dụ không muốn học tiếng Trung nữa${RESET}"
     echo -e "${VANG}Máy mới nên chọn mục ${TIM}1${VANG} trước tiên.${RESET}"
     echo -ne "${VANG}➜ Nhập STT: ${RESET}"
     read -r chon
@@ -347,6 +350,7 @@ hien_menu() {
             3) cai_hoc_trung; da_cai=1 ;;
             4) cai_may_tinh;  da_cai=1 ;;
             5) cai_thu_vien; cai_hoc_linux; cai_hoc_trung; cai_may_tinh; da_cai=1; break ;;
+            6) go_cai_dat;;
             *) echo -e "${DO}⚠ Bỏ qua lựa chọn không hợp lệ: '${so}'${RESET}" ;;
         esac
     done
@@ -367,7 +371,7 @@ go_cai_dat() {
     echo -e "${VANG}Chọn (các) mục muốn gỡ:${RESET}\n"
     echo -e "   ${TIM}1${RESET})  Mỗi ngày một lệnh Linux (hoc, hoc-linux)"
     echo -e "   ${TIM}2${RESET})  Học từ mới tiếng Trung   (tu)"
-    echo -e "   ${TIM}3${RESET})  Công cụ máy tính         (donrac, pin)"
+    echo -e "   ${TIM}3${RESET})  Công cụ máy tính         (donrac, pin, thoi-tiet, toolset)"
     echo -e "   ${TIM}4${RESET})  Gỡ tất cả"
     echo -e "   ${TIM}0${RESET})  Thoát"
     echo -ne "\n${VANG}➜ Nhập STT: ${RESET}"
@@ -389,11 +393,11 @@ go_cai_dat() {
                 xoa_bashrc_block "hoc-trung"
                 echo -e "   ${XANH}✔ Đã gỡ: tu${RESET}" ;;
             3)
-                sudo rm -f /usr/local/bin/donrac /usr/local/bin/pin
-                sudo rm -f "$THU_MUC_LINUX_SCRIPT/donrac" "$THU_MUC_LINUX_SCRIPT/pin"
-                echo -e "   ${XANH}✔ Đã gỡ: donrac, pin${RESET}" ;;
+                sudo rm -f /usr/local/bin/donrac /usr/local/bin/pin /usr/local/bin/thoi-tiet /usr/local/bin/toolset
+                sudo rm -f "$THU_MUC_LINUX_SCRIPT/donrac" "$THU_MUC_LINUX_SCRIPT/pin" "$THU_MUC_LINUX_SCRIPT/thoi-tiet" "$THU_MUC_LINUX_SCRIPT/toolset"
+                echo -e "   ${XANH}✔ Đã gỡ: donrac, pin, thoi-tiet, toolset${RESET}" ;;
             4)
-                sudo rm -f /usr/local/bin/hoc /usr/local/bin/hoc-linux /usr/local/bin/donrac /usr/local/bin/pin /usr/local/bin/tu
+                sudo rm -f /usr/local/bin/hoc /usr/local/bin/hoc-linux /usr/local/bin/donrac /usr/local/bin/pin /usr/local/bin/thoi-tiet /usr/local/bin/toolset /usr/local/bin/tu
                 sudo rm -rf "$THU_MUC_LINUX" "$THU_MUC_TRUNG"
                 xoa_bashrc_block "hoc-linux"
                 xoa_bashrc_block "hoc-trung"
@@ -410,7 +414,7 @@ go_cai_dat() {
 kiem_tra_trang_thai() {
     in_tieu_de
     echo -e "${VANG}📊 Trạng thái lệnh đã cài:${RESET}\n"
-    for lenh in hoc hoc-linux tu donrac pin; do
+    for lenh in hoc hoc-linux tu donrac pin thoi-tiet toolset; do
         if command -v "$lenh" &>/dev/null; then
             echo -e "   ${XANH}✔ $lenh${RESET} → $(command -v "$lenh")"
         else
@@ -459,7 +463,7 @@ case "${1:-}" in
         echo -e "   ${TIM}bash cai-dat.sh --thu-vien${RESET}    → Chỉ cài thư viện cần thiết (apt + pip)"
         echo -e "   ${TIM}bash cai-dat.sh --hoc-linux${RESET}   → Chỉ cài hoc, hoc-linux"
         echo -e "   ${TIM}bash cai-dat.sh --hoc-trung${RESET}   → Chỉ cài tu"
-        echo -e "   ${TIM}bash cai-dat.sh --may-tinh${RESET}    → Chỉ cài donrac, pin"
+        echo -e "   ${TIM}bash cai-dat.sh --may-tinh${RESET}    → Chỉ cài donrac, pin, thoi-tiet, toolset"
         echo -e "   ${TIM}bash cai-dat.sh --go-cai-dat${RESET}  → Gỡ cài đặt (có menu chọn)"
         echo -e "   ${TIM}bash cai-dat.sh --kiem-tra${RESET}    → Kiểm tra trạng thái\n" ;;
     *)

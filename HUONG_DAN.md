@@ -205,7 +205,7 @@ Không cần cài thêm gì — script gọi API qua `curl` + `python3` (có s�
 
 ## 🌅 HIỂN THỊ HỌC TẬP MỖI KHI MỞ TERMINAL
 
-Nếu đã cài nhóm 2 và/hoặc nhóm 3, mỗi lần mở terminal sẽ tự hiện:
+Nếu đã cài nhóm 2 và/hoặc nhóm 3, mỗi lần mở terminal sẽ tự hiển thị:
 
 ```
 💡 LỆNH HÔM NAY: grep — Tìm kiếm chuỗi văn bản trong tệp
@@ -213,6 +213,14 @@ Nếu đã cài nhóm 2 và/hoặc nhóm 3, mỗi lần mở terminal sẽ tự 
 
 🀄 TIẾNG TRUNG HÔM NAY: 天气  tiān qì  Thời tiết
    Ví dụ: 今天天气怎么样？(Hôm nay thời tiết thế nào?)
+```
+
+Phần hiển thị không tự động phát âm. Muốn nghe phát âm, chạy:
+
+```bash
+tu nghe <từ>
+# hoặc
+tu --nghe <từ>
 ```
 
 Nếu chỉ cài 1 trong 2 nhóm, chỉ dòng tương ứng hiện ra. Gỡ nhóm nào thì dòng đó
