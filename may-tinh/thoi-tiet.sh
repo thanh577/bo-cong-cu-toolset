@@ -7,6 +7,19 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [ -f "$SCRIPT_DIR/lib.sh" ] && source "$SCRIPT_DIR/lib.sh"
 
+case "${1:-}" in
+    --help|-h|--giup-do)
+        echo -e "\e[1;36m🌦  THỜI TIẾT — Xem thời tiết nhanh\e[0m"
+        echo ""
+        echo "Cách dùng:"
+        echo "  thoi-tiet             → Thời tiết Hà Nội (mặc định)"
+        echo "  thoi-tiet \"Ten thanh pho\" → Thời tiết thành phố bạn nhập"
+        echo "  thoi-tiet --help      → Xem hướng dẫn này"
+        echo ""
+        exit 0
+        ;;
+esac
+
 THANH_PHO="${1:-Hanoi}"
 THANH_PHO_URL=$(echo "$THANH_PHO" | sed 's/ /+/g')
 
